@@ -38,7 +38,9 @@ Let's use the `p` function we learned in the previous lesson with an
 address.
 
 ```sh
-$ sed -n '1 p' example.txt
+sed -n '1 p' example.txt
+```
+```
 Oh, if you're a bird, be an early bird
 ```
 
@@ -49,7 +51,9 @@ line-number counter is equal to 1. We can use any address we want, so
 long as it is an integer.
 
 ```sh
-$ sed -n '3 p' example.txt
+sed -n '3 p' example.txt
+```
+```
 If you're a bird, be an early bird-
 ```
 
@@ -57,13 +61,15 @@ Notice that if we specify an address that exceeds the total number of
 lines we get no output.
 
 ```sh
-$ sed -n '30 p' example.txt
+sed -n '30 p' example.txt
 ```
 
 `sed` uses `$` as an alias for the last line of the input stream.
 
 ```sh
-$ sed -n '$ p' example.txt
+sed -n '$ p' example.txt
+```
+```
 But if you're a worm, sleep late.
 ```
 
@@ -78,7 +84,9 @@ lines that contain 'bird'. We'll use the same pattern we used for
 line-number addresses:
 
 ```sh
-$ sed -n '/bird/ p' example.txt
+sed -n '/bird/ p' example.txt
+```
+```
 Oh, if you're a bird, be an early bird
 If you're a bird, be an early bird-
 ```
@@ -89,7 +97,9 @@ affected by this command. We'll use the `=` function, which prints the
 line-number instead of the line contents.
 
 ```sh
-$ sed -n '/bird/ =' example.txt
+sed -n '/bird/ =' example.txt
+```
+```
 1
 3
 ```
@@ -97,7 +107,9 @@ $ sed -n '/bird/ =' example.txt
 Let's run a similar command for 'worm'.
 
 ```sh
-$ sed -n '/worm/ =' example.txt
+sed -n '/worm/ =' example.txt
+```
+```
 2
 4
 ```
@@ -105,7 +117,9 @@ $ sed -n '/worm/ =' example.txt
 Context addresses are regular expressions so they can be more complex.
 
 ```sh
-$ sed -n '/b.*l/ p' example.txt
+sed -n '/b.*l/ p' example.txt
+```
+```
 1
 2
 3
@@ -125,7 +139,9 @@ range is as you expect: it matches the first line-number and applies
 the script until (and including) the next line-number address.
 
 ```sh
-$ sed -n '2,3 p' example2.txt
+sed -n '2,3 p' example2.txt
+```
+```
   # This is an extra line.
 And catch the worm for your breakfast plate.
 ```
@@ -144,7 +160,9 @@ another attempt is made on subsequent lines to match the first
 address. This process continues until the end of the stream.
 
 ```sh
-$ sed -n '/bird/,/worm/ p' example2.txt
+sed -n '/bird/,/worm/ p' example2.txt
+```
+```
 Oh, if you're a bird, be an early bird
   # This is an extra line.
 And catch the worm for your breakfast plate.
@@ -160,7 +178,9 @@ Note that matching the second address always happens on subsequent
 lines. The following is legal.
 
 ```sh
-$ sed -n '/late/,/late/ p' example2.txt
+sed -n '/late/,/late/ p' example2.txt
+```
+```
 And catch the worm for your breakfast plate.
   # This line won't always be captured.
 If you're a bird, be an early bird-
@@ -172,7 +192,9 @@ We can mix line-number and context address. Lets print all the lines
 starting from the first comment to the end of the file.
 
 ```sh
-$ sed -n '/#/,$ p' example2.txt
+sed -n '/#/,$ p' example2.txt
+```
+```
   # This is an extra line.
 And catch the worm for your breakfast plate.
   # This line won't be captured.

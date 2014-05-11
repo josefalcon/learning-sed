@@ -43,14 +43,14 @@ techniques for manipulating the pattern space.
 `sed` is invoked with the following format
 
 ```sh
-$ sed [options] command file
+sed [options] command file
 ```
 
 We'll expand on this pattern later, but for now it will serve this
 tutorial well. Let's write our first `sed` command.
 
 ```sh
-$ sed '' example.txt
+sed '' example.txt
 ```
 
 The simplest command is the empty command. In this example, we ask
@@ -65,7 +65,7 @@ command above functions a lot like `cat`.
 We can disable this behaviour with the `-n` flag.
 
 ```sh
-$ sed -n '' example.txt
+sed -n '' example.txt
 ```
 
 What happens? Nothing. With the `-n` flag we ask `sed` not to print
@@ -77,7 +77,7 @@ unless explicitly directed to. This introduces our first `sed` command:
 Simple enough.
 
 ```sh
-$ sed -n 'p' example.txt
+sed -n 'p' example.txt
 ```
 
 We see the print command overrides the `-n` flag. So what is
@@ -92,7 +92,7 @@ line of text.
 What would happen if we applied the print command without `-n`?
 
 ```sh
-$ sed 'p' example.txt
+sed 'p' example.txt
 ```
 
 Each line is printed twice!

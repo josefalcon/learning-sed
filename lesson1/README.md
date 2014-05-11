@@ -1,6 +1,5 @@
-# What is `sed`?
+# stream editor
 
-`sed` = __s__tream __ed__itor
 
 `sed` is a text processing utility written by Lee E. McMahon while at
 Bell Labs. McMahon describes `sed` as a "non-interactive context

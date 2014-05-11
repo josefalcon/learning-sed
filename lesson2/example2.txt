@@ -1,0 +1,7 @@
+Oh, if you're a bird, be an early bird
+  # This is an extra line.
+And catch the worm for your breakfast plate.
+  # This line won't always be captured.
+If you're a bird, be an early bird-
+  # One more line captured.
+But if you're a worm, sleep late.

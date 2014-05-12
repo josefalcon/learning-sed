@@ -210,6 +210,40 @@ Not all commands accept addresses, and not all commands accept address
 ranges. Be sure to read the documentation on commands for more
 information.
 
+## Negation
+
+Addresses and ranges can be negated with `!`.
+
+```sh
+sed -n '$! p' example.txt
+```
+```
+Oh, if you're a bird, be an early bird
+And catch the worm for your breakfast plate.
+If you're a bird, be an early bird-
+```
+
+The example above prints every line but the last. Negation also works
+for context addresses. To print every line not containing 'bird':
+
+```sh
+sed -n '/bird/! p' example.txt
+```
+```
+And catch the worm for your breakfast plate.
+But if you're a worm, sleep late.
+```
+
+Use negation with ranges too. If we negate a previous example, we get
+the excluded the line.
+
+```sh
+sed -n '/bird/,/worm/! p' example2.txt
+```
+```
+  # This line won't always be captured.
+```
+
 ## Recap
 
 - Addresses define when commands should be applied.

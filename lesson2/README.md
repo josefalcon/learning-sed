@@ -131,6 +131,9 @@ sed -n '/b.*l/ p' example.txt
 containing 'D2C4'.
 - On what line number does that appear?
 - What are the 10 uuids following it?
+- The `=` command works with line-number addresses too. Write a `sed`
+command that returns the total number of lines in a file. Compare
+your function with `wc -l`.
 
 ## Address Ranges
 

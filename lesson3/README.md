@@ -37,7 +37,7 @@ Let's do the same with `$USERNAME`.
 ```sh
 sed 's/$USERNAME/falcon/' config.json
 ```
-```json
+```
 {
     name: $NAME,
     username: falcon,
@@ -52,7 +52,7 @@ persist. We'll address this shortly.
 Second, notice that only the first occurence of `$USERNAME` on each
 line was replaced. Thus we see the following for `paths`.
 
-```json
+```
     paths: ['/Users/falcon/Desktop', '/Users/$USERNAME/Code'],
 ```
 
@@ -77,7 +77,7 @@ at `/Local/User/$USERNAME/`.
 ```sh
 sed 's/\/Users/\/Local\/User/g' config.json
 ```
-```json
+```
 {
     name: $NAME,
     username: $USERNAME,
@@ -119,7 +119,7 @@ together two commands from our previous example.
 ```sh
 sed -e 's/$NAME/Jose Falcon/' -e 's/$USERNAME/falcon/g' config.json
 ```
-```json
+```
 {
     name: Jose Falcon,
     username: falcon,
@@ -180,7 +180,7 @@ use a single digit.
 ```sh
 sed 's/$USERNAME/falcon/2' config.json
 ```
-```json
+```
 {
     name: $NAME,
     username: $USERNAME,
@@ -198,7 +198,7 @@ print the pattern space if and only if a replacement was made.
 ```sh
 sed -n 's/$USERNAME/falcon/2p' config.json
 ```
-```json
+```
     paths: ['/Users/$USERNAME/Desktop', '/Users/falcon/Code'],
 ```
 
@@ -214,7 +214,7 @@ sed 's/$USERNAME/falcon/gw /tmp/changes.txt' config.json
 ```sh
 cat /tmp/changes.txt
 ```
-```json
+```
     username: falcon,
     paths: ['/Users/falcon/Desktop', '/Users/falcon/Code'],
 ```

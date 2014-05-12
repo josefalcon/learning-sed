@@ -132,6 +132,12 @@ single form. Commands are applied in the order they are specified.
 Commands are applied to every line (note that an addressed command will
 still only affect lines for which the address matches). 
 
+Some implementations of `sed` allow `;` to delimit multiple commands.
+
+```sh
+sed 's/$NAME/Jose Falcon/;s/$USERNAME/falcon/g' config.json
+```
+
 ## Special Characters
 
 ### &

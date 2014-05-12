@@ -1,0 +1,5 @@
+{
+    name: $NAME,
+    username: $USERNAME,
+    paths: ['/Users/$USERNAME/Desktop', '/Users/$USERNAME/Code'],
+}

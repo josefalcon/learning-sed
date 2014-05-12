@@ -14,80 +14,123 @@ Typically, the delimiter used is `/`, but it can be any character
 except space or newline. For readability, it is best to use a
 delimiter not found in `<pattern>`.
 
-Let's make a copy of the first 50 uuids from the `uuids.txt` file
-from lesson 2. We can use `sed` to do that!
+For this lesson, we'll be working with the `config.json` template
+file. Our goal is to use `sed` to substitute keywords with actual
+values to generate a hypothetical configuration file. Our config
+file uses two keywords: `$NAME` and `$USERNAME`.
+
+Let's start by substituting `$NAME` for your name.
 
 ```sh
-sed -n '1,50 p' ../lesson2/uuids.txt > uuids.txt
+sed 's/$NAME/Jose Falcon/' config.json
+```
+```json
+{
+    name: Jose Falcon,
+    username: $USERNAME,
+    paths: ['/Users/$USERNAME/Desktop', '/Users/$USERNAME/Code'],
+}
 ```
 
-The uuids in our new file uses `-` to separate groups of characters in
-the uuid. To replace `-` with `:` we use the `s` function.
+Let's do the same with `$USERNAME`.
 
 ```sh
-sed 's/-/:/' uuids.txt
+sed 's/$USERNAME/falcon/' config.json
 ```
-```
-7BDB8954:BED2-4EE3-ACDE-62362CDFB205
-2F413D1F:88AD-4C0A-A7E7-C286D7E49AD0
-7D4F240B:D926-424D-89E0-0352FEBD91CA
-...
-```
-
-Notice that only the first occurence of `-` on each line is
-replaced. By default, `s` only replaces the first occurence of each
-match. We can use the `g` flag to replace all matches on a line.
-
-```sh
-sed 's/-/:/g' uuids.txt
-```
-```
-7BDB8954:BED2:4EE3:ACDE:62362CDFB205
-2F413D1F:88AD:4C0A:A7E7:C286D7E49AD0
-7D4F240B:D926:424D:89E0:0352FEBD91CA
+```json
+{
+    name: $NAME,
+    username: falcon,
+    paths: ['/Users/falcon/Desktop', '/Users/$USERNAME/Code'],
+}
 ```
 
-Suppose we want to replace `-` with `/foo/bar/`. The use of slashes
-in our replacement text makes the command difficult to read.
+First, notice that $NAME reappears in our output. We aren't modifying
+our template file, when we run `sed` so the last invocation does not
+persist. We'll address this shortly.
 
-```sh
-sed 's/-/\/foo\/bar\//g' uuids.txt
+Second, notice that only the first occurence of `$USERNAME` on each
+line was replaced. Thus we see the following for `paths`.
+
+```json
+    paths: ['/Users/falcon/Desktop', '/Users/$USERNAME/Code'],
 ```
 
-Forward slashes might appear in the pattern if we are working with
-file paths.
-
-TODO: would like something more practical here.
+By default, `s` only replaces the first occurence of each match on
+each line. We can use the `g` flag to replace all matches on a line.
 
 ```sh
-sed 's/\/User\/falcon\/projects/\/User\/guest\/projects/' 
+sed 's/$USERNAME/falcon/g' config.json
+```
+```
+{
+    name: $NAME,
+    username: falcon,
+    paths: ['/Users/falcon/Desktop', '/Users/falcon/Code'],
+}
 ```
 
-When the pattern or replacement text includes an instance of the
-delimiting character it must be escaped with a backslash, thus
-polluting the command. To improve readability we can use a different
-delimiting character.
-
-```sh
-sed 's:/User/falcon/projects:/User/guest/projects:' 
-```
-
-Or with underscores
-
-```sh
-sed 's_/User/falcon/projects_/User/guest/projects_' 
-```
-
+Suppose we want to update our template to change the default user
+paths. Instead of `/Users/$USERNAME/` we'd like to put new user paths
+at `/Local/User/$USERNAME/`.
 
 ```sh
-sed 's_-_/foo/bar/_g' uuids.txt
+sed 's/\/Users/\/Local\/User/g' config.json
 ```
+```json
+{
+    name: $NAME,
+    username: $USERNAME,
+    paths: ['/Local/User/$USERNAME/Desktop', '/Local/User/$USERNAME/Code'],
+}
 ```
-7BDB8954/foo/bar/BED2/foo/bar/4EE3/foo/bar/ACDE/foo/bar/62362CDFB205
-2F413D1F/foo/bar/88AD/foo/bar/4C0A/foo/bar/A7E7/foo/bar/C286D7E49AD0
-7D4F240B/foo/bar/D926/foo/bar/424D/foo/bar/89E0/foo/bar/0352FEBD91CA
-...
+
+The command does what we'd like, but it is difficult to read.  When
+the pattern or replacement text includes an instance of the delimiting
+character it must be escaped with a backslash, thus polluting the
+command. To improve readability we can use a different delimiting
+character.
+
+```sh
+sed 's:/Users:/Local/User:g' config.json
 ```
+
+Or with underscores,
+
+```sh
+sed 's_/Users_/Local/User_g' config.json
+```
+
+Both are significantly easier to read and understand.
+
+## Chaining
+
+What if we want to replace to `$NAME` and `$USERNAME` with
+a single command?
+
+The `-e` option specifies a string as an 'editing command'.  Until
+this point, all of our examples have only used a single editing
+command. The `-e` option may be omitted when only one editing command
+is specified.
+
+However, multiple editing commands can be specified. Let's chain
+together two commands from our previous example.
+
+```sh
+sed -e 's/$NAME/Jose Falcon/' -e 's/$USERNAME/falcon/g' config.json
+```
+```json
+{
+    name: Jose Falcon,
+    username: falcon,
+    paths: ['/Users/falcon/Desktop', '/Users/falcon/Code'],
+}
+```
+
+Before processing starts, `sed` compiles all editing commands into a
+single form. Commands are applied in the order they are specified.
+Commands are applied to every line (note that an addressed command will
+still only affect lines for which the address matches). 
 
 ## Special Characters
 
@@ -128,41 +171,52 @@ TODO: example of \n
 
 There are four possible flags for substitute.
 
-The global flag, `g`, substitutes for **all** matches of pattern. As
-the previous section mentioned, by default, `sed` only substitutes
-the first occurence of the match.
+The global flag, `g`, substitutes **all** matches of pattern. We saw
+an example of using the `g` flag in our `config.json` example.
+
+If there is a specific occurence of the pattern you'd like to replace,
+use a single digit.
 
 ```sh
-TODO: example of g
+sed 's/$USERNAME/falcon/2' config.json
 ```
-```
+```json
+{
+    name: $NAME,
+    username: $USERNAME,
+    paths: ['/Users/$USERNAME/Desktop', '/Users/falcon/Code'],
+}
 ```
 
-If there is a specific occurence of the pattern we'd like to replace, use
-a single digit.
-
-```sh
-TODO: example of 1/2/3
-```
-```
-```
+Notice that only one occurence of $USERNAME is replaced. If there is
+only one occurence of the pattern on a line (as in line 3), and the
+number specified exceeds 1, no substitution occurs.
 
 Recall our print function `p`. We can use a `p` flag with substitute to
 print the pattern space if and only if a replacement was made.
 
 ```sh
-TODO: example of p
+sed -n 's/$USERNAME/falcon/2p' config.json
 ```
+```json
+    paths: ['/Users/$USERNAME/Desktop', '/Users/falcon/Code'],
 ```
-```
+
+We use the `-n` option again to silence printing. The `p` flag at the
+end of our command specifies when to print.
 
 The last flag, `w`, functions like `p`, but writes to a file. If the
 given file exists, it is overwritten, otherwise it is created.
 
 ```sh
-TODO: example of w
+sed 's/$USERNAME/falcon/gw /tmp/changes.txt' config.json
 ```
+```sh
+cat /tmp/changes.txt
 ```
+```json
+    username: falcon,
+    paths: ['/Users/falcon/Desktop', '/Users/falcon/Code'],
 ```
 
 ## Addresses

@@ -14,39 +14,80 @@ Typically, the delimiter used is `/`, but it can be any character
 except space or newline. For readability, it is best to use a
 delimiter not found in `<pattern>`.
 
-```sh
-sed 's///' example.txt
-```
-```
-```
-
-Suppose our pattern contains `/` as a character. We can use a different
-delimiter to improve readability.
+Let's make a copy of the first 50 uuids from the `uuids.txt` file
+from lesson 2. We can use `sed` to do that!
 
 ```sh
-sed 's:/home/path:/something/else/' paths.txt
-```
-```
+sed -n '1,50 p' ../lesson2/uuids.txt > uuids.txt
 ```
 
-Or
-
-```sh
-sed 's_/home/path_/something/else_' paths.txt
-```
-```
-```
-
-By default, substitute only substitues the first match of
-`<pattern>` per line.
+The uuids in our new file uses `-` to separate groups of characters in
+the uuid. To replace `-` with `:` we use the `s` function.
 
 ```sh
-TODO: example where the first occurence happens on multiple lines.
+sed 's/-/:/' uuids.txt
 ```
 ```
+7BDB8954:BED2-4EE3-ACDE-62362CDFB205
+2F413D1F:88AD-4C0A-A7E7-C286D7E49AD0
+7D4F240B:D926-424D-89E0-0352FEBD91CA
+...
 ```
 
-We'll learn how to replace all occurences in the Flags section.
+Notice that only the first occurence of `-` on each line is
+replaced. By default, `s` only replaces the first occurence of each
+match. We can use the `g` flag to replace all matches on a line.
+
+```sh
+sed 's/-/:/g' uuids.txt
+```
+```
+7BDB8954:BED2:4EE3:ACDE:62362CDFB205
+2F413D1F:88AD:4C0A:A7E7:C286D7E49AD0
+7D4F240B:D926:424D:89E0:0352FEBD91CA
+```
+
+Suppose we want to replace `-` with `/foo/bar/`. The use of slashes
+in our replacement text makes the command difficult to read.
+
+```sh
+sed 's/-/\/foo\/bar\//g' uuids.txt
+```
+
+Forward slashes might appear in the pattern if we are working with
+file paths.
+
+TODO: would like something more practical here.
+
+```sh
+sed 's/\/User\/falcon\/projects/\/User\/guest\/projects/' 
+```
+
+When the pattern or replacement text includes an instance of the
+delimiting character it must be escaped with a backslash, thus
+polluting the command. To improve readability we can use a different
+delimiting character.
+
+```sh
+sed 's:/User/falcon/projects:/User/guest/projects:' 
+```
+
+Or with underscores
+
+```sh
+sed 's_/User/falcon/projects_/User/guest/projects_' 
+```
+
+
+```sh
+sed 's_-_/foo/bar/_g' uuids.txt
+```
+```
+7BDB8954/foo/bar/BED2/foo/bar/4EE3/foo/bar/ACDE/foo/bar/62362CDFB205
+2F413D1F/foo/bar/88AD/foo/bar/4C0A/foo/bar/A7E7/foo/bar/C286D7E49AD0
+7D4F240B/foo/bar/D926/foo/bar/424D/foo/bar/89E0/foo/bar/0352FEBD91CA
+...
+```
 
 ## Special Characters
 

@@ -24,7 +24,7 @@ Let's start by substituting `$NAME` for your name.
 ```sh
 sed 's/$NAME/Jose Falcon/' config.json
 ```
-```json
+```
 {
     name: Jose Falcon,
     username: $USERNAME,

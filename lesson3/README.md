@@ -140,38 +140,67 @@ sed 's/$NAME/Jose Falcon/;s/$USERNAME/falcon/g' config.json
 
 ## Special Characters
 
-### &
-
-The `<replacement>` text is not a pattern, though it does support
+The `<replacement>` text is not a pattern, but it does support
 a few special characters. An `&` character in the replacement text
-is replaced by the entire string matching the pattern.
+is replaced by the entire string matching the pattern. Note that
+this behaviour can be escaped with `\&`.
+
+Our configuration example is not valid json. First, our substitutions
+for `$NAME` and `$USERNAME` should be enclosed in double quotes.
+We'll use `sed` to update our configuration file.
 
 ```sh
-TODO: example of &
+sed 's/$.*NAME/"&"/' config.json
 ```
 ```
-```
-
-Like all special replacement characters, this behaviour can be escaped
-with a backslash, `\&`.
-
-```sh
-TODO: example of \&
-```
-```
+{
+    name: "$NAME",
+    username: "$USERNAME",
+    paths: ['/Users/"$USERNAME/Desktop', '/Users/$USERNAME"/Code'],
+}
 ```
 
-### \n
-
-An occurence of `\n`, where `n` is a digit, is replaced by the <i>n</i>th
-substring match of the given pattern. This is called a 'backreference
-expression'.
+This is close, but notice the `paths` line. The pattern `$.*NAME` also
+matches `$USERNAME/Desktop', '/Users/$USERNAME`. Our replacement text
+uses `&` to wrap the entire match in double quotes, which isn't
+correct. We can tighten our regular expression with an anchor.
 
 ```sh
-TODO: example of \n
+sed 's/$.*NAME,$/"&"/' config.json
 ```
 ```
+{
+    name: "$NAME,"
+    username: "$USERNAME,"
+    paths: ['/Users/$USERNAME/Desktop', '/Users/$USERNAME/Code'],
+}
 ```
+
+The `$` at the end of our pattern specifies the 'end-of-line anchor'.
+This fixes the issue with `paths` but introduces a new problem: the
+`,` falls within the double quotes. Basic Regular Expressions support
+grouping with `\(` and `\)`. We can reference these 'capturing' groups
+with back references in our replacement text.
+
+```sh
+sed 's/\($.*NAME\),$/"\1",/' config.json
+```
+```
+{
+    name: "$NAME",
+    username: "$USERNAME",
+    paths: ['/Users/$USERNAME/Desktop', '/Users/$USERNAME/Code'],
+}
+```
+
+Back references are specified by `\n` where `n` is a digit. In this
+case, we capture everything but the `,` and anchor, and rewrite the
+expression in our replacement text.
+
+### Practice
+
+Our configuration keys also need to be enclosed with double quotes.
+Write a `sed` command for wrapping keys with double quotes.
 
 ## Flags
 
@@ -227,4 +256,34 @@ cat /tmp/changes.txt
 
 ## Addresses
 
-TODO
+`sed` supports extended regular expressions with the `-E` option.
+TODO: Go over differences? Perhaps there should be a lesson
+TODO: on writing BRE and ERE
+
+
+```sh
+sed -E 's/\$(USER)?NAME/"&"/' config.json
+```
+```
+{
+    name: "$NAME",
+    username: "$USERNAME",
+    paths: ['/Users/"$USERNAME"/Desktop', '/Users/$USERNAME/Code'],
+}
+```
+
+As in our previous example, this command modifies `paths`.
+We can use a context address for conditional application.
+We'd like to apply the command for all lines except `paths`.
+Recall that addressess can be 'negated' with '!'.
+
+```sh
+sed -E '/paths/! s/\$(USER)?NAME/"&"/' config.json
+```
+```
+{
+    name: "$NAME",
+    username: "$USERNAME",
+    paths: ['/Users/$USERNAME/Desktop', '/Users/$USERNAME/Code'],
+}
+```

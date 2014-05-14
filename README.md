@@ -30,4 +30,7 @@ a README. `cd` into the lesson folder, and start learning `sed`!
 1. [<b>s</b>tream <b>ed</b>itor](https://github.com/josefalcon/learning-sed/tree/master/lesson1)
 2. [Addresses](https://github.com/josefalcon/learning-sed/tree/master/lesson2)
 3. [Substitution](https://github.com/josefalcon/learning-sed/tree/master/lesson3)
-4. TODO
+4. [Deletion]()
+5. [n/N]() 
+6. [Labels and Branching]()
+7. [Hold Space]()

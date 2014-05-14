@@ -80,3 +80,10 @@ sed '/^#/! d' /etc/passwd
 # Open Directory.
 ...
 ```
+
+Deletion also supports address ranges. The following is equivalent to
+the command above.
+
+```sh
+sed '1,10! d' /etc/passwd
+```

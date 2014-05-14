@@ -28,8 +28,23 @@ sed '1! d' ../lesson2/example.txt
 Oh, if you're a bird, be an early bird
 ```
 
-Recall that `!` negates our address. So this new command reads like,
-"Delete every line whose line-number is not 1".
+Recall that `!` negates our address. So this new command reads,
+"Delete every line whose line-number is not 1". We also so how to
+print only the last line.
+
+```sh
+sed -n '$ p' ../lesson2/example.txt
+```
+```
+But if you're a worm, sleep late.
+```
+
+```sh
+sed '$! d' ../lesson2/example.txt
+```
+```
+But if you're a worm, sleep late.
+```
 
 What if we want to delete only the first line? That's easy; just drop
 the `!`.

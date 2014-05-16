@@ -102,3 +102,79 @@ the command above.
 ```sh
 sed '1,10! d' /etc/passwd
 ```
+
+## Next line, please!
+
+One interesting command in `sed` is the `n` command. The `man` entry
+for `n` reads:
+
+> Write the pattern space to the standard output if the default output
+> has not been suppressed, and replace the pattern space with the next
+> line of input.
+
+The `example.txt` file for this example is organized with words
+containing 'even' appearing on even lines, and words containing 'odd'
+appearing on odd lines. We'll use `sed` and the new `n` command to
+display its power.
+
+```sh
+sed 'n;d' example.txt
+```
+```
+odd
+oddish
+oddness
+Odds
+odds
+...
+```
+
+Let's break this down. The first three lines are:
+
+```
+odd
+antevenient
+oddish
+```
+
+When `sed` begins processing it reads `odd` into the pattern
+space. `n` is the first function to operate on the pattern
+space which says, "print the pattern space, then replace the
+pattern space with the next line." After `odd` is printed,
+`antevenient` is put into the pattern space, and `sed` moves
+on to the next command, `d`. From this lesson, we know that
+`d` deletes the pattern space and starts the next cycle. Thus,
+`oddish` is read into the pattern space and the cycle repeats.
+
+Let's invert some commands.
+
+```sh
+sed -n 'n;p' example.txt
+```
+```
+antevenient
+Beneventan
+Beneventana
+bevenom
+Cevennian
+...
+```
+
+Unlike our previous command, this command uses the `-n` option
+to turn off default printing. We've also replaced the `d` function
+with the `p` function. So what is happening in this example. Like
+before, `odd` is read into the pattern space, and the first function
+encountered is `n`. `n` only prints if default printing is enabled,
+but the existence of the `-n` option disables that behaviour, so no
+printing occurs (don't get confused with `n` and `-n`. `-n` is an
+option passed to `sed`. `n` is a `sed` function that operates on
+the pattern space). So `odd` is removed the pattern space without
+printing, and `antevenient` is placed in the pattern space. The next
+command `p` forces printing. The cycle continues after that.
+
+## Recap
+
+- `d` is used to delete the contents of the pattern space. It immediately
+begins the next cycle.
+- `n` prints the pattern space unless default printing is disabled. It
+replaces the contents of the pattern space with the next line.

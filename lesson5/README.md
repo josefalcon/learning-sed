@@ -67,7 +67,7 @@ lines of the file are:
 ```
 1
 some line of text
-3
+2
 another line of text
 ```
 
@@ -83,7 +83,9 @@ some line of text
 
 There are no further commands to execute, and because printing is not
 surpressed with `-n`, the contents of the pattern space are written out.
-The cycle repeats.
+The cycle will then repeat. Note that when the cycle repeats, and the
+next line of input is read into the pattern space, the entire pattern
+space is deleted.
 
 But if the pattern space contains a newline character, we can use the
 substitution command to remove it! Let's add another command to the

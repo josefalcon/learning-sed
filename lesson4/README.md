@@ -118,7 +118,7 @@ appearing on odd lines. We'll use `sed` and the new `n` command to
 display its power.
 
 ```sh
-sed 'n;d' example.txt
+sed -e 'n' -e 'd' example.txt
 ```
 ```
 odd
@@ -149,7 +149,7 @@ on to the next command, `d`. From this lesson, we know that
 Let's invert some commands.
 
 ```sh
-sed -n 'n;p' example.txt
+sed -n -e 'n' -e 'p' example.txt
 ```
 ```
 antevenient
@@ -166,15 +166,15 @@ with the `p` function. So what is happening in this example. Like
 before, `odd` is read into the pattern space, and the first function
 encountered is `n`. `n` only prints if default printing is enabled,
 but the existence of the `-n` option disables that behaviour, so no
-printing occurs (don't get confused with `n` and `-n`. `-n` is an
-option passed to `sed`. `n` is a `sed` function that operates on
-the pattern space). So `odd` is removed the pattern space without
+printing occurs. So `odd` is removed the pattern space without
 printing, and `antevenient` is placed in the pattern space. The next
 command `p` forces printing. The cycle continues after that.
 
 ## Recap
 
-- `d` is used to delete the contents of the pattern space. It immediately
-begins the next cycle.
+- `d` is used to delete the contents of the pattern space. It
+immediately begins the next cycle.
 - `n` prints the pattern space unless default printing is disabled. It
 replaces the contents of the pattern space with the next line.
+- Don't get confused with `n` and `-n`. `-n` is an option passed to
+`sed`, while `n` is a function that operates on the pattern space.

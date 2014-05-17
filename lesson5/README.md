@@ -108,11 +108,43 @@ space.
 Our work in the previous examples adds line numbers to empty lines.
 Write a `sed` command to only write line numbers on non-empty lines.
 
+## Single Line Delete
 
+It can be useful to delete only a portion of the pattern space when
+it contains multiple lines. `D` is the `sed` command to delete the
+first part of the pattern space through the first newline character.
+Like its relative, `d`, it immediately starts the next cycle.
+
+```sh
+sed -e 'N' -e 'D' example.txt
+```
+```
+```
+
+```sh
+sed -e 'N' -e '$! D' example.txt
+```
+```
+```
+
+What does it mean to immediately start the next cycle?
+
+```sh
+sed -e 'N' -e '$! D' -e 'p' example.txt
+```
+```
+```
+## Labels and Branches
+
+- `:`
+- `b`
+- `t`
 
 ## Recap
 
 - The `N` command appends the next line of the input stream to the pattern
 space with a newline. It does not attempt to print.
-- `P`
-- `D`
+- `P` prints the initial portion of the pattern space up to the first
+newline character.
+- `D` deletes the initial portion of the pattern space through the first
+newline character. It immediately starts the next cycle.

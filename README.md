@@ -31,6 +31,11 @@ a README. `cd` into the lesson folder, and start learning `sed`!
 2. [Addresses](https://github.com/josefalcon/learning-sed/tree/master/lesson2)
 3. [Substitution](https://github.com/josefalcon/learning-sed/tree/master/lesson3)
 4. [Deletion](https://github.com/josefalcon/learning-sed/tree/master/lesson4)
-5. [Multiline]() 
-6. [Labels and Branching]()
-7. [Hold Space]()
+5. [Multiline & Branching]() 
+6. [Hold Space]()
+
+## Resources
+
+- [sedsed](http://aurelio.net/projects/sedsed/): A sed debugger. Useful
+for understanding and visualizing the pattern and hold space.
+- [sed 1 liners](http://sed.sourceforge.net/sed1line.txt)

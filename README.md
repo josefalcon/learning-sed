@@ -31,7 +31,7 @@ a README. `cd` into the lesson folder, and start learning `sed`!
 2. [Addresses](https://github.com/josefalcon/learning-sed/tree/master/lesson2)
 3. [Substitution](https://github.com/josefalcon/learning-sed/tree/master/lesson3)
 4. [Deletion](https://github.com/josefalcon/learning-sed/tree/master/lesson4)
-5. [Multiline & Branching]() 
+5. [Multiline & Branching](https://github.com/josefalcon/learning-sed/tree/master/lesson5)
 6. [Hold Space]()
 
 ## Resources
